@@ -28,11 +28,25 @@ a {
 
   h1 {
     color: set-text-colour($background-colour);
+    margin-top: 1rem;
   }
 }
 
-#canvas {
-  width: 1000px;
-  height: 500px;
-  margin: 1rem 0;
+.game {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  #canvas {
+    // width: 1000px;
+    // height: 700px;
+    width: 80vw;
+    height: 80vh;
+    margin: 1rem 0;
+  }
+
+  p {
+    color: set-text-colour($background-colour);
+  }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./Button";
 
-function Controls() {
+function Controls(props) {
   return (
     <div className="controls">
       <Button
@@ -10,6 +10,7 @@ function Controls() {
         btnSize="btn--small"
         btnColour="blue"
         text="Start"
+        onClick={props.onStart}
       />
 
       <Button
@@ -18,6 +19,7 @@ function Controls() {
         btnSize="btn--small"
         btnColour="blue"
         text="Stop"
+        onClick={props.onStop}
       />
     </div>
   );
