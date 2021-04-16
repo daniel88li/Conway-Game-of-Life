@@ -47,7 +47,7 @@
 
 body {
   background: peachpuff;
-  color: #fff;
+  color: #000;
   height: 100vh;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +60,7 @@ h1 {
 }
 
 a {
-  color: #fff;
+  color: blue;
   text-decoration: none;
 }
 
@@ -83,7 +83,6 @@ a {
 }
 
 .App h1 {
-  color: #000;
   margin-top: 1rem;
 }
 
