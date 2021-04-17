@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import Controls from "./Controls";
 
 function Canvas(props) {
@@ -9,6 +9,9 @@ function Canvas(props) {
   const deadCell = "white";
   const aliveCell = "black";
   const updateSpeed = "500";
+  const [generation, setGeneration] = useState(0);
+  const [population, setPopulation] = useState(0);
+  const [lineFlag, setLineFlag] = useState(true);
 
   // build grid and init cell values (dead/alive)
   function buildGrid(cols, rows) {
@@ -59,23 +62,33 @@ function Canvas(props) {
     return nextGen;
   }
 
-  function draw(context, grid) {
-    for (let row = 0; row < grid.length; row++) {
-      for (let col = 0; col < grid[row].length; col++) {
-        const cell = grid[row][col];
-        context.fillStyle = cell ? aliveCell : deadCell;
-        context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-        context.strokeStyle = "grey";
-        context.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+  const draw = useCallback(
+    (context, grid) => {
+      for (let row = 0; row < grid.length; row++) {
+        for (let col = 0; col < grid[row].length; col++) {
+          const cell = grid[row][col];
+          context.fillStyle = cell ? aliveCell : deadCell;
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+          context.strokeStyle = lineFlag ? "grey" : "white";
+          context.strokeRect(
+            col * cellSize,
+            row * cellSize,
+            cellSize,
+            cellSize
+          );
+        }
       }
-    }
-  }
+      setGeneration((prev) => prev + 1);
+      setPopulation(getPopulation(grid));
+    },
+    [lineFlag]
+  );
 
   // function clearCanvas(context) {
   //   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   // }
 
-  function update() {
+  const update = useCallback(() => {
     let grid = gridRef.current;
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -84,7 +97,7 @@ function Canvas(props) {
     grid = generationUpdate(grid, cols, rows);
     draw(context, grid);
     gridRef.current = grid;
-  }
+  }, [draw]);
 
   // run once on mount
   useEffect(() => {
@@ -115,23 +128,40 @@ function Canvas(props) {
     return () => clearInterval(updateInterval);
   }, []);
 
-  function onStart() {
+  const onStart = useCallback(() => {
     onStop();
     const updateInterval = setInterval(() => {
       requestAnimationFrame(update);
     }, updateSpeed);
     intervalRef.current = updateInterval;
-  }
+  }, [update]);
 
   function onStop() {
     clearInterval(intervalRef.current);
   }
 
+  function toggleStroke() {
+    setLineFlag((prev) => !prev);
+  }
+
+  useEffect(() => {
+    onStart();
+  }, [lineFlag, onStart]);
+
+  function getPopulation(grid) {
+    return grid
+      .reduce((arr, row) => arr.concat(row))
+      .reduce((sum, value) => sum + value);
+  }
+
   return (
     <div className="game">
       <canvas id="canvas" ref={canvasRef} {...props} />
+      <div className="game-stat">
+        <p>Generation: {generation}</p> <p>Population: {population}</p>
+      </div>
       <p>Updates every {updateSpeed} ms.</p>
-      <Controls onStart={onStart} onStop={onStop} />
+      <Controls onStart={onStart} onStop={onStop} toggleStroke={toggleStroke} />
     </div>
   );
 }

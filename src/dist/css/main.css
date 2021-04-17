@@ -52,6 +52,7 @@ body {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
 }
 
 h1 {
@@ -108,7 +109,24 @@ a {
   margin: 1rem 0;
 }
 
+.game-stat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.game-stat p {
+  margin: 0 1rem;
+}
+
 .game p {
   color: #000;
+  margin-bottom: 5px;
 }
 /*# sourceMappingURL=main.css.map */

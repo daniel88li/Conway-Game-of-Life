@@ -21,6 +21,15 @@ function Controls(props) {
         text="Stop"
         onClick={props.onStop}
       />
+
+      <Button
+        id="button-canvas-lines"
+        btnStyle="btn--round"
+        btnSize="btn--small"
+        btnColour="blue"
+        text="Toggle Lines"
+        onClick={props.toggleStroke}
+      />
     </div>
   );
 }
