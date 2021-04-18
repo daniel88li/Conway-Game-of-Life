@@ -10,6 +10,7 @@ function Controls(props) {
         btnSize="btn--small"
         btnColour="blue"
         text="Start"
+        btnClasses={props.dimStyle[0] ? "btn--dim" : ""}
         onClick={props.onStart}
       />
 
@@ -19,6 +20,7 @@ function Controls(props) {
         btnSize="btn--small"
         btnColour="blue"
         text="Stop"
+        btnClasses={props.dimStyle[1] ? "btn--dim" : ""}
         onClick={props.onStop}
       />
 
@@ -28,6 +30,7 @@ function Controls(props) {
         btnSize="btn--small"
         btnColour="blue"
         text="Toggle Lines"
+        btnClasses=""
         onClick={props.toggleStroke}
       />
     </div>

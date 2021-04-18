@@ -1,5 +1,6 @@
 $primary-colour: #272727;
 $background-colour: peachpuff;
+$button-colour: #56baf8;
 
 * {
   box-sizing: border-box;
@@ -17,6 +18,10 @@ $background-colour: peachpuff;
   } @else {
     @return #fff;
   }
+}
+
+@function dim-button($colour) {
+  @return lighten($colour, 15%);
 }
 
 @mixin media-med {

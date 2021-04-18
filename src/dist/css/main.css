@@ -10,6 +10,8 @@
   text-align: center;
   cursor: pointer;
   margin: 0 1rem;
+  background-color: #56baf8;
+  color: black;
   /* size */
 }
 
@@ -20,6 +22,12 @@
 .btn:focus {
   outline: none;
   border: 1px solid black;
+}
+
+.btn:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  background-color: #25a6f6;
 }
 
 .btn--round {
@@ -40,9 +48,8 @@
   height: 3rem;
 }
 
-.blue {
-  background-color: lightskyblue;
-  color: black;
+.btn--dim {
+  background-color: #9fd8fb;
 }
 
 body {

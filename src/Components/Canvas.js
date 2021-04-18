@@ -12,6 +12,7 @@ function Canvas(props) {
   const [generation, setGeneration] = useState(0);
   const [population, setPopulation] = useState(0);
   const [lineFlag, setLineFlag] = useState(true);
+  const [dimButtons, setDimButtons] = useState([false, false]);
 
   // build grid and init cell values (dead/alive)
   function buildGrid(cols, rows) {
@@ -78,8 +79,6 @@ function Canvas(props) {
           );
         }
       }
-      setGeneration((prev) => prev + 1);
-      setPopulation(getPopulation(grid));
     },
     [lineFlag]
   );
@@ -96,6 +95,8 @@ function Canvas(props) {
     const rows = Math.floor(canvas.height / cellSize);
     grid = generationUpdate(grid, cols, rows);
     draw(context, grid);
+    setGeneration((prev) => prev + 1);
+    setPopulation(getPopulation(grid));
     gridRef.current = grid;
   }, [draw]);
 
@@ -117,6 +118,8 @@ function Canvas(props) {
     function update() {
       grid = generationUpdate(grid, cols, rows);
       draw(context, grid);
+      setGeneration((prev) => prev + 1);
+      setPopulation(getPopulation(grid));
       gridRef.current = grid;
     }
 
@@ -134,10 +137,12 @@ function Canvas(props) {
       requestAnimationFrame(update);
     }, updateSpeed);
     intervalRef.current = updateInterval;
+    setDimButtons([true, false]);
   }, [update]);
 
   function onStop() {
     clearInterval(intervalRef.current);
+    setDimButtons([false, true]);
   }
 
   function toggleStroke() {
@@ -154,14 +159,37 @@ function Canvas(props) {
       .reduce((sum, value) => sum + value);
   }
 
+  // update cells on click
+  function handleClick(e) {
+    let grid = gridRef.current;
+    const cellRow = Math.floor(e.nativeEvent.offsetY / cellSize);
+    const cellCol = Math.floor(e.nativeEvent.offsetX / cellSize);
+    grid[cellRow][cellCol] = grid[cellRow][cellCol] ? 0 : 1;
+    gridRef.current = grid;
+    // pause game to enable multiple edits
+    onStop();
+    const context = canvasRef.current.getContext("2d");
+    draw(context, grid);
+  }
+
   return (
     <div className="game">
-      <canvas id="canvas" ref={canvasRef} {...props} />
+      <canvas
+        id="canvas"
+        ref={canvasRef}
+        {...props}
+        onClick={(e) => handleClick(e)}
+      />
       <div className="game-stat">
         <p>Generation: {generation}</p> <p>Population: {population}</p>
       </div>
       <p>Updates every {updateSpeed} ms.</p>
-      <Controls onStart={onStart} onStop={onStop} toggleStroke={toggleStroke} />
+      <Controls
+        onStart={onStart}
+        onStop={onStop}
+        toggleStroke={toggleStroke}
+        dimStyle={dimButtons}
+      />
     </div>
   );
 }
